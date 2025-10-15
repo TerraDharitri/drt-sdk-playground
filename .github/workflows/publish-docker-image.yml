@@ -1,6 +1,6 @@
 env:
   IMAGE_NAME: development-playground
-  REGISTRY_HOSTNAME: terradharitri
+  REGISTRY_HOSTNAME: Terradharitri
 
 name: Build  & push Docker image
 

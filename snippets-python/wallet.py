@@ -2,7 +2,7 @@ import getpass
 import os
 from pathlib import Path
 from typing import List, Tuple
-from dharitri_sdk import UserSigner
+from dharitri_py_sdk import UserSigner
 
 from constants import HRP
 
