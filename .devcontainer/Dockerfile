@@ -4,6 +4,12 @@ ARG USERNAME=developer
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+ARG VERSION_DRTPY="0.0.3"
+ARG SDK_PY_VERSION="0.0.5"
+ARG VERSION_RUST="1.87.0"
+ARG VERSION_SC_META="1.19.0"
+ARG VERSION_NODE=22
+
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
@@ -28,7 +34,7 @@ RUN apt-get update && apt-get install -y \
 USER $USERNAME
 WORKDIR /home/${USERNAME}
 
-ENV DHARITRI="/home/${USERNAME}/dharitri-sdk"
+ENV DHARITRI="/home/${USERNAME}/dharitri-py-sdk"
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
 
@@ -36,32 +42,30 @@ ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
 RUN python3 -m pip install --no-cache-dir --user pipx
 
 # Install drtpy
-ARG VERSION_DRTPY="v9.10.2"
 RUN pipx install dharitri-sdk-cli==${VERSION_DRTPY}
 
-# Install rust and other tools
-ARG VERSION_RUST="1.82.0"
+# Install rust
 RUN wget -O rustup.sh https://sh.rustup.rs && \
     chmod +x rustup.sh && \
-    ./rustup.sh --verbose --default-toolchain ${VERSION_RUST} --target wasm32-unknown-unknown -y && \
-    rm -rf /home/${USERNAME}/.cargo/registry/* && rm -rf /home/${USERNAME}/.cargo/git/*
+    CARGO_HOME=/home/${USERNAME}/.cargo RUSTUP_HOME=/home/${USERNAME}/.rustup ./rustup.sh --verbose --default-toolchain ${VERSION_RUST} --profile minimal -y && \
+    rm rustup.sh
 
-ARG VERSION_SC_META="0.54.0"
-RUN cargo install dharitri-sc-meta --locked --version ${VERSION_SC_META} && \
-    rustup component add rustfmt && \
-    rm -rf /home/${USERNAME}/.cargo/registry/* && rm -rf /home/${USERNAME}/.cargo/git/*
+# Install sc-meta tools
+RUN CARGO_HOME=/home/${USERNAME}/.cargo RUSTUP_HOME=/home/${USERNAME}/.rustup PATH="/home/${USERNAME}/.cargo/bin:${PATH}" \
+    cargo install dharitri-sc-meta --version ${VERSION_SC_META} --locked
 
-RUN sc-meta install all
+# Temporary workaround - Add settings.json for sc-meta dependencies
+RUN mkdir -p $HOME/.config/Code/User && \
+    echo '{}' > $HOME/.config/Code/User/settings.json
 
-# Temporary workaround (until fixes in drt-rs-sdk are released):
-# https://github.com/TerraDharitri/drt-rs-sdk/pull/1424
-COPY "./run-scenarios" /home/${USERNAME}/.cargo/bin/run-scenarios
+# Install other tools
+RUN CARGO_HOME=/home/${USERNAME}/.cargo RUSTUP_HOME=/home/${USERNAME}/.rustup PATH="/home/${USERNAME}/.cargo/bin:${PATH}" \
+    sc-meta install all
 
 # Install test wallets
 RUN drtpy deps install testwallets && rm ${DHARITRI}/*.tar.gz
 
 # Install Node JS
-ARG VERSION_NODE=22
 RUN wget -O install.sh https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh && \
     chmod +x install.sh && \
     ./install.sh
@@ -72,8 +76,6 @@ RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${VERSION_NODE}
 ENV PATH="/home/${USERNAME}/.nvm/versions/node/v${VERSION_NODE}/bin:${PATH}"
 
 # Install DharitrI libraries (Python)
-ARG SDK_PY_VERSION="1.0.0"
-
-RUN pip3 install dharitri-sdk==${SDK_PY_VERSION}
+RUN pip3 install dharitri-py-sdk==${SDK_PY_VERSION}
 
 # Note: DharitrI libraries for JavaScript / TypeScript aren't installed globally.

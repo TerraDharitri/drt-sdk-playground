@@ -1,17 +1,17 @@
-# drt-sdk-playground - maintenance
+# drt-py-sdk-playground - maintenance
 
 Skip this if you are not a maintainer of the Playground.
 
 Build the Docker image:
 
 ```
-docker build --network=host ./.devcontainer -t dharitri/development-playground:latest -f ./.devcontainer/Dockerfile
+docker build --network=host ./.devcontainer -t terradharitri/development-playground:latest -f ./.devcontainer/Dockerfile
 ```
 
 Push the Docker image:
 
 ```
-docker push dharitri/development-playground:latest
+docker push terradharitri/development-playground:latest
 ```
 
 Test the devcontainer by running the Visual Studio command:

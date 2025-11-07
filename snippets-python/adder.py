@@ -3,8 +3,8 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any
 
-from dharitri_sdk import Account, AddressComputer, Address, DevnetEntrypoint
-from dharitri_sdk.abi import Abi
+from dharitri_py_sdk import Account, AddressComputer, Address, DevnetEntrypoint
+from dharitri_py_sdk.abi import Abi
 from constants import EXPLORER_URL
 from wallet import pick_a_signer
 

@@ -5,7 +5,7 @@
         "SNIPPETS_PY": "${containerWorkspaceFolder}/snippets-python",
         "SNIPPETS_JS": "${containerWorkspaceFolder}/snippets-javascript",
         "SANDBOX": "${containerWorkspaceFolder}/sandbox",
-        "TESTWALLETS": "/home/developer/dharitri-sdk/testwallets/latest/users"
+        "TESTWALLETS": "/home/developer/dharitri-py-sdk/testwallets/latest/users"
     },
     "customizations": {
         "vscode": {
