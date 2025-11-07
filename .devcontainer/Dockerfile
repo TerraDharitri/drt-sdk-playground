@@ -6,9 +6,9 @@ ARG USER_GID=$USER_UID
 
 ARG VERSION_DRTPY="0.0.3"
 ARG SDK_PY_VERSION="0.0.5"
-
 ARG VERSION_RUST="1.87.0"
 ARG VERSION_SC_META="1.19.0"
+ARG VERSION_NODE=22
 
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -50,7 +50,7 @@ RUN wget -O rustup.sh https://sh.rustup.rs && \
     CARGO_HOME=/home/${USERNAME}/.cargo RUSTUP_HOME=/home/${USERNAME}/.rustup ./rustup.sh --verbose --default-toolchain ${VERSION_RUST} --profile minimal -y && \
     rm rustup.sh
 
-# Install sc-meta tool
+# Install sc-meta tools
 RUN CARGO_HOME=/home/${USERNAME}/.cargo RUSTUP_HOME=/home/${USERNAME}/.rustup PATH="/home/${USERNAME}/.cargo/bin:${PATH}" \
     cargo install dharitri-sc-meta --version ${VERSION_SC_META} --locked
 
@@ -66,7 +66,6 @@ RUN CARGO_HOME=/home/${USERNAME}/.cargo RUSTUP_HOME=/home/${USERNAME}/.rustup PA
 RUN drtpy deps install testwallets && rm ${DHARITRI}/*.tar.gz
 
 # Install Node JS
-ARG VERSION_NODE=22
 RUN wget -O install.sh https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh && \
     chmod +x install.sh && \
     ./install.sh
