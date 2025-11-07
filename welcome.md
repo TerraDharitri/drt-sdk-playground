@@ -4,7 +4,7 @@ Welcome to the DharitrI Development Playground.
 
 ## Test wallet
 
-Create a test wallet on `Devnet`: https://devnet-wallet.dharitri.com. You can fund the newly created account directly from the Devnet Wallet (click on _Faucet_).
+Create a test wallet on `Devnet`: https://devnet-wallet.dharitri.org. You can fund the newly created account directly from the Devnet Wallet (click on _Faucet_).
 
 Then, place the test wallet (e.g. `wallet.pem`) in the `sandbox` folder.
 
@@ -84,7 +84,7 @@ The WASM bytecode files can be found in the `output` subirectory of each contrac
 Deploy `Adder`:
 
 ```
-drtpy contract deploy --proxy=https://devnet-api.dharitri.com \
+drtpy contract deploy --proxy=https://devnet-api.dharitri.org \
     --bytecode=$CONTRACTS/adder/output/adder.wasm --gas-limit=15000000 --arguments 0 \
     --pem=$SANDBOX/wallet.pem --recall-nonce \
     --send
@@ -93,7 +93,7 @@ drtpy contract deploy --proxy=https://devnet-api.dharitri.com \
 Deploy `PingPong`:
 
 ```
-drtpy contract deploy --proxy=https://devnet-api.dharitri.com \
+drtpy contract deploy --proxy=https://devnet-api.dharitri.org \
     --bytecode=$CONTRACTS/ping-pong/output/ping-pong.wasm --gas-limit=25000000 --arguments 1000000000000000000 600 0x00 \
     --pem=$SANDBOX/wallet.pem --recall-nonce \
     --send
